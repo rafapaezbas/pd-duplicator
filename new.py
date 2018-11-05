@@ -6,7 +6,7 @@ file = 'C:/Users/xpaezr/Desktop/patch.pd'
 originalFile = []
 
 def isObj(tokens):
-	if len(tokens) > 1 and tokens[1] == 'floatatom' or tokens[1] == 'obj':
+	if len(tokens) > 1 and tokens[1] == 'floatatom' or tokens[1] == 'obj' or tokens[1] == 'text':
 		return True
 	else:
 		return False
@@ -17,33 +17,37 @@ def isWire(tokens):
 	else:
 		return False
 		
+def isDuplicable(tokens):
+	if len(tokens) > 1 and tokens[1] == 'floatatom' or tokens[1] == 'obj':
+		return True
+	else:
+		return False
+		
 #look for variables
 with open(file,'r') as f:
 	originalFile = f.readlines();
-	lines = f.readlines()
-	for line in lines:
+	for line in originalFile:
 		tokens = line.split()
-		if len(tokens) > 5 and tokens[1] == 'text' and tokens[4] == 'VAR':
+		if len(tokens) > 4 and tokens[1] == 'text' and tokens[4] == 'VAR':
 			vars[tokens[5]] = []
 			index = 6
 			while index < len(tokens):
 				vars[tokens[5]].append(tokens[index])
 				index = index + 1
 
-print(originalFile)
+print(vars)
 
 #count objects
 for line in originalFile:
 			if isObj(line.split()):
 				objects = objects + 1
-		
-				
+					
 index = 1
 while index < duplication_times:	
 	#read lines form file and duplicate objects
 	with open(file,'a+') as f:
 		for line in originalFile:
-			if isObj(line.split()):
+			if isDuplicable(line.split()):
 				duplicatedLine = line.split()
 				#change if object is one of the vars, var is a dictionary
 				if duplicatedLine[3] in vars:
