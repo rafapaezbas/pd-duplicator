@@ -17,12 +17,6 @@ def isWire(tokens):
 	else:
 		return False
 		
-def isDuplicable(tokens):
-	if len(tokens) > 1 and tokens[1] == 'floatatom' or tokens[1] == 'obj':
-		return True
-	else:
-		return False
-		
 #look for variables
 with open(file,'r') as f:
 	originalFile = f.readlines();
@@ -47,11 +41,12 @@ while index < duplication_times:
 	#read lines form file and duplicate objects
 	with open(file,'a+') as f:
 		for line in originalFile:
-			if isDuplicable(line.split()):
+			if isObj(line.split()):
 				duplicatedLine = line.split()
 				#change if object is one of the vars, var is a dictionary
-				if duplicatedLine[3] in vars:
-					duplicatedLine[3] = duplicatedLine[3] + " " + str(vars[duplicatedLine[3]][index - 1])
+				for key in vars.keys():
+					if key + ";" in duplicatedLine:
+						duplicatedLine[4] = duplicatedLine[4].replace(";","") +  " " + vars[key][index - 1].replace(";","") + ";" 
 				#change position value
 				#parse to int in order to increment
 				duplicatedLine[2] = int(duplicatedLine[2]) + (offset * index)
