@@ -1,7 +1,7 @@
 import sys
 
 objects = 0
-offset = 150
+offset = sys.argv[4]
 vars = {}
 duplication_times = int(sys.argv[2])
 file = sys.argv[1]
