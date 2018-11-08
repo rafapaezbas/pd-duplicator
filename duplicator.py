@@ -1,9 +1,14 @@
+import sys
+
 objects = 0
-offset = 50
+offset = 150
 vars = {}
-duplication_times = 3
-file = 'C:/Users/xpaezr/Desktop/patch.pd'
+duplication_times = int(sys.argv[2])
+file = sys.argv[1]
 originalFile = []
+replace_tokens = sys.argv[3];
+
+#program call -> new.py C:/users/file 2 "select 98 99: key 99 100"
 
 def isObj(tokens):
 	if len(tokens) > 1 and tokens[1] == 'floatatom' or tokens[1] == 'obj' or tokens[1] == 'text':
@@ -17,17 +22,17 @@ def isWire(tokens):
 	else:
 		return False
 		
-#look for variables
 with open(file,'r') as f:
-	originalFile = f.readlines();
-	for line in originalFile:
-		tokens = line.split()
-		if len(tokens) > 4 and tokens[1] == 'text' and tokens[4] == 'VAR':
-			vars[tokens[5]] = []
-			index = 6
-			while index < len(tokens):
-				vars[tokens[5]].append(tokens[index])
-				index = index + 1
+	originalFile = f.readlines()
+		
+#look for variables, an instruction is an object and its values, e.g select 97 98 99
+for instruction in replace_tokens.split(":"):
+	object = instruction.split()[0]
+	vars[object] = []
+	index = 1
+	while index < len(instruction.split()):
+		vars[object].append(instruction.split()[index])
+		index = index + 1
 
 print(vars)
 
